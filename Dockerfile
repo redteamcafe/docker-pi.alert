@@ -40,7 +40,7 @@ RUN ln -s /pialert/install/index.html /var/www/html/index.html
 RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
-#NOTE: Download and Install PiAlert
+#NOTE: Download and Install Pi Alert
 #NOTE: Remove the 'q' option to enable verbose output (useful for troubleshooting)
 RUN wget -q --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
 #NOTE Add the 'v' option to enable verbose output (useful for troublehsooting)
