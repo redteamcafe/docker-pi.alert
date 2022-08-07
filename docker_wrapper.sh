@@ -11,6 +11,9 @@ else
 fi
 
 #NOTE: Start lighttpd
-service lighttpd restart
+service lighttpd start
+
+#NOTE: Start cron
+service cron start
 
 /bin/bash
