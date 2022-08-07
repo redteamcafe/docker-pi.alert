@@ -17,6 +17,8 @@ Pi Alert is a WiFi and LAN intrusion alerting system that detects and alerts whe
 Currently supported:
 * x86-64
 
+Ah yes.... the irony. Pi.Alert and it isn't even supported on ARM to run on Raspberry Pi. I know. When I was testing this I was making it for x86-64. I will be working to add support for Raspberry Pi this week.
+
 # Deployment
 
 ## Docker Compose
@@ -65,6 +67,7 @@ SMTP_USER='user@gmail.com'
 SMTP_PASS='password'
 
 # Future Contributions and Features
+* Support for ARM for Raspberry Pi (SOON)
 * Figure out a way to have pialert deployed without using the host network
 
 
