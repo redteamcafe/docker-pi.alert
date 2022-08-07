@@ -40,11 +40,11 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - /docs
+      - /pialert
 # For the time being, I am commenting these out and using the host network until I can figure out the arp-scan
 #    ports:
 #      - 8080:80
-    network: "host"
+    network_mode: "host"
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     restart: unless-stopped
