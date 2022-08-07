@@ -22,7 +22,7 @@ Currently supported:
 ## Docker Compose
 
 ```
-docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
+docker run -it -d --net host --name=pialert redteamcafe/pialert
 ```
 
 ## Docker CLI
@@ -33,7 +33,7 @@ docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
 version: '3'
 
 services:
-  sphinx-rtd:
+  pialert:
     image: redteamcafe/pialert:latest
     container_name: pialert
     environment:
@@ -55,12 +55,6 @@ services:
 | `-p 8080:80` | webserver port for accessing PiAlert |
 | `-e PUID=1000` | set UserID |
 | `-e PGID=1000` | set GroupID |
-| `-e REPORT_MAIL=True` | Set to 'True' |
-| `-e REPORT_TO='user@gmail.com'` | name of the Sphinx project author |
-| `-e SMTP_SERVER='smtp.gmail.com'` | 
-| `-e SMTP_PORT=587` | |
-| `-e SMTP_USER='user@gmail.com'` | |
-| `-e SMTP_PASS='password'` | |
 | `-v ./pialert:/pialert` | location where pialert data is stored |
 
 REPORT_MAIL False
@@ -71,7 +65,6 @@ SMTP_USER='user@gmail.com'
 SMTP_PASS='password'
 
 # Future Contributions and Features
-* Environmental variables that enable options for HTML, PDF and EPub documentation (when not declared, default to HTML)
-* Environmental variables that allow Sphinx Autobuild to be disabled (when not declared, enable by default)
+* Figure out a way to have pialert deployed without using the host network
 
 
