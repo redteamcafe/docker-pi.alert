@@ -5,6 +5,7 @@ MAINTAINER Christian McLaughlin <info@redteamcafe.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV PUID 1000
 ENV PGID 1000
+ENV PORT 8080
 
 #NOTE: pialert.conf variables
 ENV PIALERT_PATH /pialert
@@ -46,7 +47,10 @@ COPY pialert.sh /tmp
 RUN chmod +x /tmp/pialert.sh
 RUN bash /tmp/pialert.sh
 
-EXPOSE 80
+#NOTE: For the time being, I have to use the host network interface for Docker until I am able to figure out how to get arp-scan to work on the bridged interface
+RUN sed -ie 's/listen 80/listen '$PORT'/g' /etc/nginx/sites-available/default
+
+#EXPOSE 80
 VOLUME /pialert
 
 COPY docker_wrapper.sh /usr/local/bin/docker_wrapper.sh
