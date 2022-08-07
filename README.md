@@ -22,7 +22,7 @@ Currently supported:
 ## Docker Compose
 
 ```
-docker run -it -d --name=sphinx-rtd -v /pialert redteamcafe/pialert
+docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
 ```
 
 ## Docker CLI
@@ -40,9 +40,11 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - /pialert
-    ports:
-      - 8080:80
+      - /docs
+# For the time being, I am commenting these out and using the host network until I can figure out the arp-scan
+#    ports:
+#      - 8080:80
+    network: "host"
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     restart: unless-stopped
@@ -59,7 +61,7 @@ services:
 | `-e SMTP_PORT=587` | |
 | `-e SMTP_USER='user@gmail.com'` | |
 | `-e SMTP_PASS='password'` | |
-| `-v ./pialert/logs:/pialert` | location where pialert data is stored |
+| `-v ./pialert:/pialert` | location where pialert data is stored |
 
 REPORT_MAIL False
 REPORT_TO 'user@gmail.com'
@@ -71,6 +73,5 @@ SMTP_PASS='password'
 # Future Contributions and Features
 * Environmental variables that enable options for HTML, PDF and EPub documentation (when not declared, default to HTML)
 * Environmental variables that allow Sphinx Autobuild to be disabled (when not declared, enable by default)
-
 
 
