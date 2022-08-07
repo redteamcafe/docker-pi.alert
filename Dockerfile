@@ -5,12 +5,12 @@ MAINTAINER Christian McLaughlin <info@redteamcafe.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV PUID 1000
 ENV PGID 1000
-ENV REPORT_MAIL False
-ENV REPORT_TO 'user@gmail.com'
-ENV SMTP_SERVER 'smtp.gmail.com'
-ENV SMTP_PORT 587
-ENV SMTP_USER 'user@gmail.com'
-ENV SMTP_PASS 'password'
+ENV PORT 8080
+
+#NOTE: pialert.conf variables
+ENV PIALERT_PATH /pialert
+ENV PRINT_LOG True
+ENV SCAN_SUBNETS = --localnet
 
 SHELL ["/bin/bash", "-c"]
 
@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cron \
     curl \
     dnsutils \
+    iputils-ping \
     lighttpd \
     net-tools \
     php \
@@ -28,46 +29,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php-fpm \
     php-sqlite3 \
     python3 \
-    sqlite3
+    sqlite3 \
+    wget
     
+#NOTE: Make the directory for Pi Alert
+RUN mkdir /pialert
+
 #NOTE: Redirect default server page for Lighttpd to PiAlert
 RUN mv /var/www/html/index.lighttpd.html /var/www/html/index.lighttpd.html.old
-RUN ln -s ~/pialert/install/index.html /var/www/html/index.html
+RUN ln -s /pialert/install/index.html /var/www/html/index.html
 
 #NOTE: Activate PHP
 RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
-#NOTE: Download and Install PiAlert
-RUN curl -LOo / https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar
-RUN tar xvf /pialert_latest.tar
-RUN rm /pialert_latest.tar
+COPY pialert.sh /tmp
+RUN chmod +x /tmp/pialert.sh
+RUN bash /tmp/pialert.sh
 
-#NOTE: Public Frontend
-RUN ln -s ~/pialert/front /var/www/html/pialert
+#NOTE: For the time being, I have to use the host network interface for Docker until I am able to figure out how to get arp-scan to work on the bridged interface
+RUN sed -i 's|= 80 |= $PORT |g' /etc/lighttpd/lighttpd.conf
 
-#NOTE: Configure Webserver
-RUN cp /pialert/install/pialert_front.conf /etc/lighttpd/conf-available
-RUN ln -s ../conf-available/pialert_front.conf /etc/lighttpd/conf-enabled/pialert_front.conf
-RUN service lighttpd restart
-
-#NOTE: Change the default PiAlert path
-RUN sed -i "s,'|home/pi|pialert','|pialert'," /pialert/config/pialert.conf
-
-#NOTE Update vendors database
-RUN python3 /pialert/back/pialert.py update_vendors
-
-#NOTE: Change Python to Python3 in pialert.cron
-RUN sed -i 's|python|python3|g' pialert/install/pialert.cron
-
-#NOTE: Add crontab jobs
-RUN (crontab -l 2>/dev/null; cat /pialert/install/pialert.cron) | crontab -
-
-#NOTE: Add permissions to www-data user
-RUN chgrp -R www-data /pialert/db
-RUN chmod -R 770 /pialert/db
-
-
+#EXPOSE 80
+VOLUME /pialert
 
 COPY docker_wrapper.sh /usr/local/bin/docker_wrapper.sh
 RUN chmod +x /usr/local/bin/docker_wrapper.sh
