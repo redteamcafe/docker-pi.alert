@@ -48,7 +48,7 @@ RUN chmod +x /tmp/pialert.sh
 RUN bash /tmp/pialert.sh
 
 #NOTE: For the time being, I have to use the host network interface for Docker until I am able to figure out how to get arp-scan to work on the bridged interface
-RUN sed -ie 's/listen 80/listen '$PORT'/g' /etc/nginx/sites-available/default
+RUN sed -i 's|= 80 |= $PORT |g' /etc/lighttpd/lighttpd.conf
 
 #EXPOSE 80
 VOLUME /pialert
