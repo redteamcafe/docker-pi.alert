@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php-fpm \
     php-sqlite3 \
     python3 \
-    sqlite3
+    sqlite3 \
+    wget
     
 #NOTE: Redirect default server page for Lighttpd to PiAlert
 RUN mv /var/www/html/index.lighttpd.html /var/www/html/index.lighttpd.html.old
@@ -39,7 +40,7 @@ RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
 #NOTE: Download and Install PiAlert
-RUN curl -ofsSLO / https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar
+RUN wget -P https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar /
 RUN tar xvf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
