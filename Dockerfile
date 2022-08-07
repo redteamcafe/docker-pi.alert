@@ -41,7 +41,8 @@ RUN service lighttpd restart
 
 #NOTE: Download and Install PiAlert
 RUN wget --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
-RUN tar xvf /pialert_latest.tar
+#NOTE Remove the 'z' option to turn on output (useful for troublehsooting) 
+RUN tar zxvf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
 #NOTE: Public Frontend
@@ -56,7 +57,9 @@ RUN service lighttpd restart
 RUN sed -i "s,'|home/pi|pialert','|pialert'," /pialert/config/pialert.conf
 
 #NOTE Update vendors database
-RUN python3 /pialert/back/pialert.py update_vendors
+#NOTE These have been commented out due to issues that I am currently troublehsooting and I am just trying to get the Dockerfile to pass
+#RUN sed -i 's|sudo||g' /pialert/back/pialert.py
+#RUN python3 /pialert/back/pialert.py update_vendors
 
 #NOTE: Change Python to Python3 in pialert.cron
 RUN sed -i 's|python|python3|g' pialert/install/pialert.cron
