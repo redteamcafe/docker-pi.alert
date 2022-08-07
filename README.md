@@ -22,7 +22,7 @@ Currently supported:
 ## Docker Compose
 
 ```
-docker run -it -d --name=sphinx-rtd redteamcafe/sphinx-rtd
+docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
 ```
 
 ## Docker CLI
@@ -34,17 +34,17 @@ version: '3'
 
 services:
   sphinx-rtd:
-    image: redteamcafe/sphinx-rtd:latest
-    container_name: sphinx-rtd
+    image: redteamcafe/pialert:latest
+    container_name: pialert
     environment:
-      PROJECT_NAME: sphinx
-      PROJECT_AUTHOR: sphinx
       PUID: 1000
       PGID: 1000
     volumes:
       - /docs
-    ports:
-      - 8080:80
+# For the time being, I am commenting these out and using the host network until I can figure out the arp-scan
+#    ports:
+#      - 8080:80
+    network: "host"
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     restart: unless-stopped
