@@ -47,8 +47,6 @@ COPY pialert.sh /tmp
 RUN chmod +x /tmp/pialert.sh
 RUN bash /tmp/pialert.sh
 
-RUN mv -R /tmp/pialert/* /pialert
-
 EXPOSE 80
 VOLUME /pialert
 
