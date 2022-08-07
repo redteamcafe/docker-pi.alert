@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cron \
     curl \
     dnsutils \
+    iputils-ping \
     lighttpd \
     net-tools \
     php \
