@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     
 #NOTE: Redirect default server page for Lighttpd to PiAlert
 RUN mv /var/www/html/index.lighttpd.html /var/www/html/index.lighttpd.html.old
-RUN ln -s ~/pialert/install/index.html /var/www/html/index.html
+RUN ln -s /pialert/install/index.html /var/www/html/index.html
 
 #NOTE: Activate PHP
 RUN lighttpd-enable-mod fastcgi-php
@@ -47,7 +47,7 @@ RUN tar xf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
 #NOTE: Public Frontend
-RUN ln -s ~/pialert/front /var/www/html/pialert
+RUN ln -s /pialert/front /var/www/html/pialert
 
 #NOTE: Configure Webserver
 RUN cp /pialert/install/pialert_front.conf /etc/lighttpd/conf-available
