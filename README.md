@@ -22,7 +22,7 @@ Currently supported:
 ## Docker Compose
 
 ```
-docker run -it -d --name=sphinx-rtd redteamcafe/sphinx-rtd
+docker run -it -d --name=sphinx-rtd -v /pialert redteamcafe/pialert
 ```
 
 ## Docker CLI
@@ -34,15 +34,13 @@ version: '3'
 
 services:
   sphinx-rtd:
-    image: redteamcafe/sphinx-rtd:latest
-    container_name: sphinx-rtd
+    image: redteamcafe/pialert:latest
+    container_name: pialert
     environment:
-      PROJECT_NAME: sphinx
-      PROJECT_AUTHOR: sphinx
       PUID: 1000
       PGID: 1000
     volumes:
-      - /docs
+      - /pialert
     ports:
       - 8080:80
     stdin_open: true # docker run -i
@@ -61,7 +59,7 @@ services:
 | `-e SMTP_PORT=587` | |
 | `-e SMTP_USER='user@gmail.com'` | |
 | `-e SMTP_PASS='password'` | |
-| `-v ./pialert:/pialert` | location where pialert data is stored |
+| `-v ./pialert/logs:/pialert` | location where pialert data is stored |
 
 REPORT_MAIL False
 REPORT_TO 'user@gmail.com'
