@@ -40,7 +40,7 @@ RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
 #NOTE: Download and Install PiAlert
-RUN wget https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
+RUN wget --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
 RUN tar xvf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
