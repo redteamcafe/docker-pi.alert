@@ -39,7 +39,7 @@ RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
 #NOTE: Download and Install PiAlert
-RUN curl -LOo / https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar
+RUN curl -ofsSLO / https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar
 RUN tar xvf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
