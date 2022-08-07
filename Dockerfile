@@ -72,7 +72,8 @@ RUN (crontab -l 2>/dev/null; cat /pialert/install/pialert.cron) | crontab -
 RUN chgrp -R www-data /pialert/db
 RUN chmod -R 770 /pialert/db
 
-
+EXPOSE 80
+VOLUME /pialert
 
 COPY docker_wrapper.sh /usr/local/bin/docker_wrapper.sh
 RUN chmod +x /usr/local/bin/docker_wrapper.sh
