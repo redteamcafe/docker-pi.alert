@@ -32,3 +32,5 @@ sed -i 's|python|python3|g' pialert/install/pialert.cron
 #NOTE: Add permissions to www-data user
 chgrp -R www-data /pialert/db
 chmod -R 770 /pialert/db
+
+mv /tmp/pialert /pialert
