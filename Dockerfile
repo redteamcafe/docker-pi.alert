@@ -40,9 +40,10 @@ RUN lighttpd-enable-mod fastcgi-php
 RUN service lighttpd restart
 
 #NOTE: Download and Install PiAlert
-RUN wget --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
-#NOTE Remove the 'z' option to turn on output (useful for troublehsooting) 
-RUN tar zxvf /pialert_latest.tar
+#NOTE: Remove the 'q' option to enable verbose output (useful for troubleshooting)
+RUN wget -q --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
+#NOTE Add the 'v' option to enable verbose output (useful for troublehsooting)
+RUN tar xf /pialert_latest.tar
 RUN rm /pialert_latest.tar
 
 #NOTE: Public Frontend
