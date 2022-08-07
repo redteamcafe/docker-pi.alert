@@ -37,6 +37,9 @@ sed -i 's|python|python3|g' /pialert/install/pialert.cron
 #NOTE: Change config PIALERT_PATH
 sed -i 's|/home/pi/pialert|/pialert|g' /pialert/config/pialert.conf
 
+#NOTE: Removes 'sudo' from /pialert/back/pialert.py (this is for compatability with Docker)
+sed -i "s|'sudo', ||g" /pialert/back/pialert/py
+
 #NOTE: Add permissions to www-data user
 chgrp -R www-data /pialert/db
 chmod -R 770 /pialert/db
