@@ -5,12 +5,11 @@ MAINTAINER Christian McLaughlin <info@redteamcafe.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV PUID 1000
 ENV PGID 1000
-ENV REPORT_MAIL False
-ENV REPORT_TO 'user@gmail.com'
-ENV SMTP_SERVER 'smtp.gmail.com'
-ENV SMTP_PORT 587
-ENV SMTP_USER 'user@gmail.com'
-ENV SMTP_PASS 'password'
+
+#NOTE: pialert.conf variables
+ENV PIALERT_PATH /pialert
+ENV PRINT_LOG True
+ENV SCAN_SUBNETS = --localnet
 
 SHELL ["/bin/bash", "-c"]
 
