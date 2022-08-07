@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PIALERT_PATH=/pialert
+
+
 #NOTE: Download and Install Pi Alert
 #NOTE: Remove the 'q' option to enable verbose output (useful for troubleshooting)
 wget -q --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /tmp
@@ -30,6 +33,9 @@ sed -i 's|python|python3|g' /pialert/install/pialert.cron
 
 #NOTE: Add crontab jobs
 (crontab -l 2>/dev/null; cat /pialert/install/pialert.cron) | crontab -
+
+#NOTE: Change config PIALERT_PATH
+sed -i 's|/home/pi/pialert|/pialert|g' /pialert/config/pialert.conf
 
 #NOTE: Add permissions to www-data user
 chgrp -R www-data /pialert/db
