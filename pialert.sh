@@ -2,10 +2,12 @@
 
 #NOTE: Download and Install Pi Alert
 #NOTE: Remove the 'q' option to enable verbose output (useful for troubleshooting)
-wget -q --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /
+wget -q --no-check-certificate https://github.com/pucherot/Pi.Alert/raw/main/tar/pialert_latest.tar -P /tmp
 #NOTE Add the 'v' option to enable verbose output (useful for troublehsooting)
-tar xf /pialert_latest.tar
-rm /pialert_latest.tar
+tar xf /tmp/pialert_latest.tar
+rm /tmp/pialert_latest.tar
+
+mv /tmp/pialert/* /pialert
 
 #NOTE: Public Frontend
 ln -s /pialert/front /var/www/html/pialert
@@ -24,7 +26,7 @@ sed -i "s,'|home/pi|pialert','|pialert'," /pialert/config/pialert.conf
 #python3 /pialert/back/pialert.py update_vendors
 
 #NOTE: Change Python to Python3 in pialert.cron
-sed -i 's|python|python3|g' pialert/install/pialert.cron
+sed -i 's|python|python3|g' /pialert/install/pialert.cron
 
 #NOTE: Add crontab jobs
 (crontab -l 2>/dev/null; cat /pialert/install/pialert.cron) | crontab -
@@ -33,4 +35,3 @@ sed -i 's|python|python3|g' pialert/install/pialert.cron
 chgrp -R www-data /pialert/db
 chmod -R 770 /pialert/db
 
-mv /tmp/pialert /pialert
