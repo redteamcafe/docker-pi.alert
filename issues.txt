@@ -1,0 +1,80 @@
+######
+ISSUES
+######
+
+Exit Code 100 with ARMv7 and ARM64v8 during multibuild
+######################################################
+
+During the build process, I encounteted the following issue:
+
+```
+#11 45.20 Error while loading /usr/sbin/dpkg-split: No such file or directory
+#11 45.20 Error while loading /usr/sbin/dpkg-deb: No such file or directory
+#11 45.21 dpkg: error processing archive /var/cache/apt/archives/libpython3.10-minimal_3.10.4-3ubuntu0.1_arm64.deb (--unpack):
+#11 45.21  dpkg-deb --control subprocess returned error exit status 1
+#11 45.21 Error while loading /usr/sbin/dpkg-split: No such file or directory
+#11 45.21 Error while loading /usr/sbin/dpkg-deb: No such file or directory
+#11 45.21 dpkg: error processing archive /var/cache/apt/archives/libexpat1_2.4.7-1_arm64.deb (--unpack):
+#11 45.21  dpkg-deb --control subprocess returned error exit status 1
+#11 45.22 Error while loading /usr/sbin/dpkg-split: No such file or directory
+#11 45.22 Error while loading /usr/sbin/dpkg-deb: No such file or directory
+#11 45.22 dpkg: error processing archive /var/cache/apt/archives/python3.10-minimal_3.10.4-3ubuntu0.1_arm64.deb (--unpack):
+#11 45.22  dpkg-deb --control subprocess returned error exit status 1
+#11 45.23 Errors were encountered while processing:
+#11 45.23  /var/cache/apt/archives/libpython3.10-minimal_3.10.4-3ubuntu0.1_arm64.deb
+#11 45.23  /var/cache/apt/archives/libexpat1_2.4.7-1_arm64.deb
+#11 45.23  /var/cache/apt/archives/python3.10-minimal_3.10.4-3ubuntu0.1_arm64.deb
+#11 45.33 E: Sub-process /usr/bin/dpkg returned an error code (1)
+#11 ERROR: process "/dev/.buildkit_qemu_emulator /bin/bash -c apt-get update && apt-get install -y --no-install-recommends \
+  apt-utils \
+  arp-scan \
+  cron \
+  curl \
+  dnsutils \
+  iputils-ping \
+  lighttpd \
+  net-tools \
+  php \
+  php-cgi \
+  php-fpm \
+  php-sqlite3 \
+  python3 \
+  sqlite3 \
+  wget" did not complete successfully: exit code: 100
+```
+
+
+
+Resolved by adding the following lines of code to the github actions yml files
+
+```
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker buildx create --name multiarch --driver docker-container --use
+docker buildx inspect --bootstrap
+```
+
+Adding this to the Dockerfile also seemed to fix the issue since it revolves around an issue having to do with PATH.
+
+```
+RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split
+RUN ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb
+RUN ln -s /bin/rm /usr/sbin/rm
+RUN ln -s /bin/tar /usr/sbin/tar
+```
+
+The most obvious action appears to be setting up 'docker/setup-qemu-action' in the yml file for Github Actions
+
+```
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+```
+
+Reference: https://github.com/docker/buildx/issues/495
