@@ -14,13 +14,6 @@ ENV SCAN_SUBNETS = --localnet
 
 SHELL ["/bin/bash", "-c"]
 
-#NOTE: There is an error with armv7 and arm64v8 during the Docker buildx process that results in an exit code: 100 \
-    Refer to issues.txt for more details
-
-RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split
-RUN ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb
-RUN ln -s /bin/tar /usr/sbin/tar
-
 #NOTE: Updating and installing required packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
