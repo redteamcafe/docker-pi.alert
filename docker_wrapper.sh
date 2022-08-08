@@ -17,3 +17,4 @@ service lighttpd start
 service cron start
 
 /bin/bash
+sleep infinity
