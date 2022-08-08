@@ -17,12 +17,14 @@ Pi Alert is a WiFi and LAN intrusion alerting system that detects and alerts whe
 Currently supported:
 * x86-64
 
+Ah yes.... the irony. Pi.Alert and it isn't even supported on ARM to run on Raspberry Pi. I know. When I was testing this I was making it for x86-64. I will be working to add support for Raspberry Pi this week.
+
 # Deployment
 
 ## Docker Compose
 
 ```
-docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
+docker run -it -d --net host --name=pialert redteamcafe/pialert
 ```
 
 ## Docker CLI
@@ -33,18 +35,18 @@ docker run -it -d --net host --name=sphinx-rtd redteamcafe/sphinx-rtd
 version: '3'
 
 services:
-  sphinx-rtd:
+  pialert:
     image: redteamcafe/pialert:latest
     container_name: pialert
     environment:
       PUID: 1000
       PGID: 1000
     volumes:
-      - /docs
+      - /pialert
 # For the time being, I am commenting these out and using the host network until I can figure out the arp-scan
 #    ports:
 #      - 8080:80
-    network: "host"
+    network_mode: "host"
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     restart: unless-stopped
@@ -55,12 +57,6 @@ services:
 | `-p 8080:80` | webserver port for accessing PiAlert |
 | `-e PUID=1000` | set UserID |
 | `-e PGID=1000` | set GroupID |
-| `-e REPORT_MAIL=True` | Set to 'True' |
-| `-e REPORT_TO='user@gmail.com'` | name of the Sphinx project author |
-| `-e SMTP_SERVER='smtp.gmail.com'` | 
-| `-e SMTP_PORT=587` | |
-| `-e SMTP_USER='user@gmail.com'` | |
-| `-e SMTP_PASS='password'` | |
 | `-v ./pialert:/pialert` | location where pialert data is stored |
 
 REPORT_MAIL False
@@ -71,8 +67,7 @@ SMTP_USER='user@gmail.com'
 SMTP_PASS='password'
 
 # Future Contributions and Features
-* Environmental variables that enable options for HTML, PDF and EPub documentation (when not declared, default to HTML)
-* Environmental variables that allow Sphinx Autobuild to be disabled (when not declared, enable by default)
-
+* Support for ARM for Raspberry Pi (SOON)
+* Figure out a way to have pialert deployed without using the host network
 
 
