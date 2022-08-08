@@ -13,10 +13,6 @@ else
   /tmp/pialert.sh
 fi
 
-echo "Checks complete"
-echo "Starting 
-Python3 /pialert/back/pialert.py
-
 #NOTE: Start lighttpd
 echo "Starting lighttpd service"
 service lighttpd start
@@ -24,6 +20,11 @@ service lighttpd start
 #NOTE: Start cron
 echo "Starting crontab service"
 service cron start
+
+#NOTE: Starting the 1st Pi.Alert scan immediately 
+echo "Checks complete"
+echo "Starting Pi.Alert"
+Python3 /pialert/back/pialert.py
 
 echo "Ready"
 /bin/bash
