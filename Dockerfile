@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM redteamcafe/ubuntu:latest
 
 MAINTAINER Christian McLaughlin <info@redteamcafe.com>
 
