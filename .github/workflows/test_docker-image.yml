@@ -2,20 +2,31 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "test" ]
+    branches:
+      - 'test'
   pull_request:
-    branches: [ "test" ]
+    branches:
+      - 'test'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: docker login
+    - name: Checkout 
+      uses: actions/checkout@v3
+    - name: Setup Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+      with:
+        version: latest
+    - name: Login to Docker Hub
       env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
-      run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-    - name: docker build
-      run: docker build . -t redteamcafe/pialert:test
-    - name: docker push
-      run: docker push redteamcafe/pialert:test
+        USER: ${{ secrets.DOCKER_USER }}
+        PASS: ${{ secrets.DOCKER_PASS }}
+      run: docker login -u $USER -p $PASS
+      
+    - name: Build Images
+      run: |
+        docker buildx build --push \
+          --tag redteamcafe/pialert:test \
+          --platform linux/amd64,linux/arm/v7,linux/arm64/v8 .
