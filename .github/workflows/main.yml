@@ -3,10 +3,10 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - 'test'
+      - 'main'
   pull_request:
     branches:
-      - 'test'
+      - 'main'
 
 jobs:
   build:
@@ -28,5 +28,11 @@ jobs:
     - name: Build Images
       run: |
         docker buildx build --push \
-          --tag redteamcafe/pialert:test \
+          --tag redteamcafe/pialert:latest \
           --platform linux/amd64,linux/arm/v7,linux/arm64/v8 .
+          
+    - name: Build Images
+      run: |
+        docker buildx build --push \
+          --tag redteamcafe/pialert:raspi \
+          --platform linux/arm64/v8 .
